@@ -48,7 +48,7 @@ public class InsertSort {
         }
 
         String format1 = "%-6s: %s\n";
-        String format2 = "%-6s: %s\n\n";
+        String format2 = "%-6s: %s\n";
         System.out.format(format1, "Before", Arrays.toString(a));
         insertSort(a);
         System.out.format(format2, "After", Arrays.toString(a));
