@@ -14,16 +14,16 @@ import java.util.Random;
  * @version 8.0
  */
 public class QuickSort {
-    public static <T extends Comparable<T>> void quickSort(T[] a) {
-        quickSort(a, 0, a.length - 1);
+    public static <T extends Comparable<T>> void sort(T[] a) {
+        sort(a, 0, a.length - 1);
     }
 
-    public static <T extends Comparable<T>> void quickSort(T[] a, int p, int r) {
+    public static <T extends Comparable<T>> void sort(T[] a, int p, int r) {
         if (p < r) {
             int q = partition(a, p, r);             // 找到一个切分
             // int q = hoarePartion(a, p, r);
-            quickSort(a, p, q - 1);              // 根据切分对两个子数组排序
-            quickSort(a, q + 1, r);
+            sort(a, p, q - 1);              // 根据切分对两个子数组排序
+            sort(a, q + 1, r);
         }
     }
 
@@ -83,7 +83,7 @@ public class QuickSort {
         String format1 = "%-6s: %s\n";
         String format2 = "%-6s: %s\n";
         System.out.format(format1, "Before", Arrays.toString(a));
-        quickSort(a);
+        sort(a);
         System.out.format(format2, "After", Arrays.toString(a));
     }
 }
