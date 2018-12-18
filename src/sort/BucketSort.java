@@ -21,12 +21,12 @@ public class BucketSort {
             b[i] = new ArrayList<>();
         }
         for (int i = 0; i < a.length; i++) {
-            b[(int)(a[i]*10)].add(a[i]);                // 对每个元素进行分组
+            b[(int)(a[i]*10)].add(a[i]);                        // 对每个元素进行分组
         }
         int index = 0;                                          // 原数组中桶的边界索引
         for (int i = 0; i < R; i++) {
             Double[] bucket = b[i].toArray(new Double[0]);      // 将列表转换成数组
-            InsertSort.sort(bucket);                      // 对每个桶进行插入排序
+            InsertSort.sort(bucket);                           // 对每个桶进行插入排序
             for (int j = 0; j < bucket.length; j++) {
                 a[index+j] = bucket[j];
             }
