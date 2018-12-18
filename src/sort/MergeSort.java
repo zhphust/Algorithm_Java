@@ -18,9 +18,9 @@ public class MergeSort {
      * @param a 待排序数组
      * @param <T> 数组元素类型，继承自Comparable<T>
      */
-    public static <T extends Comparable<T>> void mergeSort(T[] a) {
+    public static <T extends Comparable<T>> void sort(T[] a) {
         reverseOrderSum = 0;
-        mergeSort(a, 0, a.length-1);        // 排序，首尾包含
+        sort(a, 0, a.length-1);        // 排序，首尾包含
     }
 
     /**
@@ -30,7 +30,7 @@ public class MergeSort {
      * @param r 数组的右边界（包含）
      * @param <T> 数组元素类型，继承自Comparable<T>
      */
-    private static <T extends Comparable<T>> void mergeSort(T[] a, int p, int r) {
+    private static <T extends Comparable<T>> void sort(T[] a, int p, int r) {
         /*
          * 改进措施：当数组较小时，直接采用插入排序，可以减少递归深度，加快排序速度
          * 注意：当采用插入排序后，就不能正确计算逆序对的数目了
@@ -41,8 +41,8 @@ public class MergeSort {
             // 分解数组
             int q = (p + r) / 2;
             // 排序子数组
-            mergeSort(a, p, q);
-            mergeSort(a, q+1, r);
+            sort(a, p, q);
+            sort(a, q+1, r);
             // 合并子数组
             merge(a, p, q, r);
         }
@@ -97,7 +97,7 @@ public class MergeSort {
      * @param a 待排序数组
      * @param <T> 数组元素类型，继承自Comparable<T>
      */
-    public static <T extends Comparable<T>> void mergeSort2(T[] a) {
+    public static <T extends Comparable<T>> void sort2(T[] a) {
         reverseOrderSum = 0;
         for (int sz = 1; sz < a.length; sz = 2*sz) {             // 每个数组的长度为sz，每次将子数组的长度加倍
             for (int j = 0; j < a.length-sz; j += 2*sz) {        // 每一对和下一对待合并数组间隔为2*sz
@@ -118,7 +118,7 @@ public class MergeSort {
          * 如果想得到正确结果，去掉插入排序的优化方式；
          * 本方法中采用了循环方式，可以得到正确结果
          */
-        mergeSort2(a);
+        sort2(a);
         return reverseOrderSum;
     }
 
