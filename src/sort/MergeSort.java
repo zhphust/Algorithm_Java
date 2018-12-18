@@ -36,7 +36,7 @@ public class MergeSort {
          * 注意：当采用插入排序后，就不能正确计算逆序对的数目了
          */
         if (r - p < 5) {
-            InsertSort.insertSort(a, p, r);
+            InsertSort.sort(a, p, r);
         } else {
             // 分解数组
             int q = (p + r) / 2;

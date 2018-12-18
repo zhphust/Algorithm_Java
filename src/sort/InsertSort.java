@@ -16,8 +16,8 @@ public class InsertSort {
      * @param a 待排定数组
      * @param <T> 数组元素类型，继承自Comparable<T>
      */
-    public static <T extends Comparable<T>> void insertSort(T[] a) {
-        insertSort(a, 0, a.length-1);
+    public static <T extends Comparable<T>> void sort(T[] a) {
+        sort(a, 0, a.length-1);
     }
 
     /**
@@ -26,7 +26,7 @@ public class InsertSort {
      * @param lo 排序的起始索引（包括）
      * @param hi 排序的终止索引（包括）
      */
-    public static <T extends Comparable<T>> void insertSort(T[] a, int lo, int hi) {
+    public static <T extends Comparable<T>> void sort(T[] a, int lo, int hi) {
         for (int i = lo+1; i <= hi; i++) {
             T key = a[i];
             int j = i - 1;
@@ -50,7 +50,7 @@ public class InsertSort {
         String format1 = "%-6s: %s\n";
         String format2 = "%-6s: %s\n";
         System.out.format(format1, "Before", Arrays.toString(a));
-        insertSort(a);
+        sort(a);
         System.out.format(format2, "After", Arrays.toString(a));
     }
 }
