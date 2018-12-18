@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Random;
 
 /**
- * 插入排序
+ * 插入排序，时间复杂度为O(N^2)，适用于小规模数组，常作为其他排序算法的子算法
  * @author Alisa.Wang zhphust09@hust.edu.cn at 2018/11/28
  * @version 8.0
  */
