@@ -13,16 +13,17 @@ public class MinHeap<T extends Comparable<T>> {
     private T[] array;
     private int heapSize = 0;
 
+    @SuppressWarnings("unchecked")
     public MinHeap() {
         array = (T[])new Comparable[1];
         array[0] = null;
     }
-
+    @SuppressWarnings("unchecked")
     public MinHeap(int max) {
         array = (T[])new Comparable[max+1];
         array[0] = null;
     }
-
+    @SuppressWarnings("unchecked")
     public MinHeap(T[] a) {
         array = (T[])new Comparable[a.length+1];
         array[0] = null;                                    // 堆的索引为0的位不使用
@@ -98,6 +99,7 @@ public class MinHeap<T extends Comparable<T>> {
      * 去掉并获得关键字最小元素
      * @return 关键字最小元素
      */
+    @SuppressWarnings("unchecked")
     public T delMin() {
         if (isEmpty()) {
             throw new NullPointerException("Heap is null.");
@@ -126,6 +128,7 @@ public class MinHeap<T extends Comparable<T>> {
         return heapSize == 0;
     }
 
+    @SuppressWarnings("unchecked")
     public T delete(int i) {
         T element = array[i];
         array[i] = array[heapSize];
@@ -153,8 +156,9 @@ public class MinHeap<T extends Comparable<T>> {
     }
 
     /**
-     * 堆排序（降序）
+     * 堆排序
      */
+    @SuppressWarnings("unchecked")
     public T[] heapSort() {
         T[] list = (T[]) new Comparable[heapSize];
         int i = 0;
@@ -166,7 +170,7 @@ public class MinHeap<T extends Comparable<T>> {
             heapSize--;
             sink(1);
         }
-        list[i++] = array[1];
+        list[i] = array[1];
         return list;
     }
 
