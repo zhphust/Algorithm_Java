@@ -18,7 +18,7 @@ public class BinaryTree<Key extends Comparable<Key>, Value> {
             this.value = value;
         }
         public String toString() {
-            return "[" + key + "(" + value + ")|" + size + "]";
+            return "[" + key + ":" + value + "|" + size + "]";
         }
     }
 
@@ -49,31 +49,35 @@ public class BinaryTree<Key extends Comparable<Key>, Value> {
     // 插入结点
     public void insert(Key key, Value value) {
         // 插入一个结点，新插入的结点一定在叶结点上
-        Node x = new Node(key, value);
+        Node z = new Node(key, value);
         if (root == null) {
-            root = x;
+            root = z;
             return;
         }
-        Node y = root;                      // 从根结点开始遍历
-        Node z = null;                      // 跟踪一个结点，该结点是最终插入位置结点的父结点
-        while (y != null) {
-            z = y;                          // 记住当前比较结点，使得最终知道将结点插入到该结点的左孩子还是右孩子
-            z.size += 1;                    // 最终添加的结点是该结点的孩子，因此子树中结点个数+1
-            if (x.key.compareTo(y.key) < 0) {
-                y = y.left;
+        Node x = root;                      // 从根结点开始遍历
+        Node y = null;                      // 跟踪一个结点，该结点是最终插入位置结点的父结点
+        while (x != null) {
+            y = x;                          // 记住当前比较结点，使得最终知道将结点插入到该结点的左孩子还是右孩子
+            y.size += 1;                    // 最终添加的结点是该结点的孩子，因此子树中结点个数+1
+            if (z.key.compareTo(x.key) < 0) {
+                x = x.left;
             } else {
-                y = y.right;
+                x = x.right;
             }
         }
 
-        if (x.key.compareTo(z.key) < 0)
-            z.left = x;
-        else z.right = x;
-        x.parent = z;
+        if (z.key.compareTo(y.key) < 0)
+            y.left = z;
+        else y.right = z;
+        z.parent = y;
     }
 
     // 删除某个关键字的结点
     public Value delete(Key key) {
+        // 查询过程会使路径上的结点数目-1，因此需要首先查看是否存在该结点
+        if (search(key) == null)
+            return null;
+
         Node x = root;
         while (x != null) {
             if (key == x.key) {
@@ -89,60 +93,48 @@ public class BinaryTree<Key extends Comparable<Key>, Value> {
         return null;
     }
 
-    private Value delete(Node x) {
-        if (x == null)
+    private Value delete(Node z) {
+        if (z == null)
             return null;
-        Value value = x.value;
+        Value value = z.value;
 
-        if (x.left == null) {                // 1. 结点的左子树为空，用右子结点占据该结点的位置
-            transplant(x, x.right);
-        } else if (x.right == null) {        // 2. 结点的右子树为空，用左子结点占据该结点的位置
-            transplant(x, x.left);
+        if (z.left == null) {                // 1. 结点的左子树为空，用右子结点占据该结点的位置
+            transplant(z, z.right);
+        } else if (z.right == null) {        // 2. 结点的右子树为空，用左子结点占据该结点的位置
+            transplant(z, z.left);
         } else {                             // 3. 该结点的左右子树均不为空，用其后继（或前驱）占据该结点的位置
-            Node z = successor(x);                   // 右子树不为空，后继一定在右子树上
-            if (z != x.right) {                      // 3.1 后继不是该待删除结点的右孩子
-                transplant(z, z.right);
-                z.right = x.right;
-                x.right.parent = z;
+            Node y = successor(z);                   // 右子树不为空，后继一定在右子树上
+            if (y != z.right) {                      // 3.1 后继不是该待删除结点的右孩子
+                Node temp = y.right;                 // 更新结点个数使用
+                transplant(y, y.right);
+                y.right = z.right;
+                z.right.parent = y;
 
-                // 更新结点（从z的右孩子，一直更新到替换z的地方，z的右孩子自身可能没有更新，后续继续处理）
-                Node k = z.right;
-                while (k.left != null) {
+                // 更新结点的个数（从y的右孩子，一直更新到替换y的地方）
+                Node k = y.right;
+                while (k != temp) {
                     k.size--;
                     k = k.left;
                 }
             }
-            transplant(x, z);                       // 3.2 后继此时为待删除结点的右孩子，和3.1是递进关系
-            z.left = x.left;
-            x.left.parent = z;
+            transplant(z, y);                       // 3.2 后继此时为待删除结点的右孩子，和3.1是递进关系
+            y.left = z.left;
+            z.left.parent = y;
 
-            // 更新结点z和z的右孩子结点的个数
-            if (z.right.left == null) {
-                z.right.size--;
-            }
-            z.size = z.left.size + z.right.size + 1;
+            // 更新结点y
+            y.size = y.left.size + y.right.size + 1;
         }
         return value;
     }
 
     public Value deleteMin() {
-        Node x = min(root);
-        Node y = root;
-        while (y != x) {
-            y.size--;
-            y = y.left;
-        }
-        return delete(x);
+        Key key = min();
+        return delete(key);
     }
 
     public Value deleteMax() {
-        Node x = max(root);
-        Node y = root;
-        while (y != x) {
-            y.size--;
-            y = y.right;
-        }
-        return delete(x);
+        Key key = max();
+        return delete(key);
     }
 
     private void transplant(Node x, Node y) {
@@ -212,7 +204,7 @@ public class BinaryTree<Key extends Comparable<Key>, Value> {
     private Node floor(Node x, Key key) {
         if (x == null || x.key == key)
             return x;
-        if (x.key.compareTo(key) > 0) {                 // 当前结点的值大于待查找关键字
+        if (key.compareTo(x.key) < 0) {                 // 当前结点的值大于待查找关键字
             return floor(x.left, key);                  // 递归在左子树中查找
         } else {
             Node y = floor(x.right, key);               // 否则，递归在右子树中继续查找
