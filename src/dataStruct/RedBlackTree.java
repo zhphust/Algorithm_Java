@@ -613,8 +613,8 @@ public class RedBlackTree<Key extends Comparable<Key>, Value> {
         bst.insert(70, 'M');
         bst.insert(72, 'Y');
         bst.delete(68);
-        bst.deleteMin();
-        bst.deleteMax();
+        System.out.println(bst.deleteMin());
+        System.out.println(bst.deleteMax());
         bst.delete(61);
         bst.delete(100);
         System.out.println(bst.levelOrderTreeWalk());
