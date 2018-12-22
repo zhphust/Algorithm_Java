@@ -32,38 +32,21 @@ public class IndexMinPriorityQueue<Key extends Comparable<Key>> {
 
     // 插入一个对象
     public void insert(int index, Key key) {
-        if (!contains(index)) {                 // 不包含该索引
-            size++;
-            pq[size] = index;
-            qp[index] = size;
-            keys[index] = key;
-            swim(size);                          // 上浮
-        } else {                                 // 包含该索引
+        if (contains(index)) {              // 包含索引，改变值
             changeKey(index, key);
+            return;
         }
-    }
+        // 不包含该索引
+        if (size == pq.length - 1) {
+            throw new RuntimeException("array is full.");
+        }
+        size++;
+        pq[size] = index;
+        qp[index] = size;
+        keys[index] = key;
 
-    // 上浮，处理的是pq的索引
-    private void swim(int k) {
-        while (k > 1 && keys[pq[k/2]].compareTo(keys[pq[k]]) > 0) {
-            swap(k, k/2);
-            k /= 2;
-        }
-    }
+        swim(size);                          // 上浮
 
-    // 下沉
-    private void sink(int k) {
-        int min = k;
-        int left = 2 * k;
-        int right = 2 * k + 1;
-        if (left <= size && keys[pq[left]].compareTo(keys[pq[min]]) < 0)
-            min = left;
-        if (right <= size && keys[pq[right]].compareTo(keys[pq[min]]) < 0)
-            min = right;
-        if (min != k) {
-            swap(min, k);
-            sink(min);
-        }
     }
 
     public void changeKey(int index, Key key) {
@@ -93,22 +76,12 @@ public class IndexMinPriorityQueue<Key extends Comparable<Key>> {
         return qp[index] != -1;
     }
 
-    private void swap(int i, int j) {
-        // 更新pq
-        int temp = pq[i];
-        pq[i] = pq[j];
-        pq[j] = temp;
-        // 同时需更新qp
-        qp[pq[i]] = i;
-        qp[pq[j]] = j;
+    public int minIndex() {
+        return pq[1];
     }
 
     public Key minKey() {
         return keys[pq[1]];
-    }
-
-    public int minIndex() {
-        return pq[1];
     }
 
     /**
@@ -132,7 +105,7 @@ public class IndexMinPriorityQueue<Key extends Comparable<Key>> {
         swap(k, size--);
         if (keys[pq[k]].compareTo(key) < 0)
             swim(k);
-        else if (keys[pq[k]].compareTo(key) > 0)
+        else
             sink(k);
 
         keys[pq[size+1]] = null;
@@ -157,6 +130,39 @@ public class IndexMinPriorityQueue<Key extends Comparable<Key>> {
         return s.toString();
     }
 
+    // 上浮，处理的是pq的索引
+    private void swim(int k) {
+        while (k > 1 && keys[pq[k/2]].compareTo(keys[pq[k]]) > 0) {
+            swap(k, k/2);
+            k /= 2;
+        }
+    }
+
+    // 下沉
+    private void sink(int k) {
+        int min = k;
+        int left = 2 * k;
+        int right = 2 * k + 1;
+        if (left <= size && keys[pq[left]].compareTo(keys[pq[min]]) < 0)
+            min = left;
+        if (right <= size && keys[pq[right]].compareTo(keys[pq[min]]) < 0)
+            min = right;
+        if (min != k) {
+            swap(min, k);
+            sink(min);
+        }
+    }
+
+    private void swap(int i, int j) {
+        // 更新pq
+        int temp = pq[i];
+        pq[i] = pq[j];
+        pq[j] = temp;
+        // 同时需更新qp
+        qp[pq[i]] = i;
+        qp[pq[j]] = j;
+    }
+
     public static void main(String[] args) {
         Random rand = new Random(47);
         IndexMinPriorityQueue<Character> mpq = new IndexMinPriorityQueue<>(20);
@@ -175,10 +181,10 @@ public class IndexMinPriorityQueue<Key extends Comparable<Key>> {
         System.out.println(mpq.keyOf(4));
         System.out.println(mpq.delete(7));
 
-        System.out.println("======");
+        System.out.println("============");
         while (mpq.size() != 0) {
             int x = mpq.minIndex();
-            System.out.println(mpq.keyOf(x));
+            System.out.print(mpq.keyOf(x) + " ");
             mpq.delete(x);
         }
     }
