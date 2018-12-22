@@ -540,6 +540,5 @@ public class BinaryTree<Key extends Comparable<Key>, Value> {
         bst.deleteMin();
         bst.deleteMax();
         System.out.println("Level: " + bst.levelOrderTreeWalk());
-
     }
 }
