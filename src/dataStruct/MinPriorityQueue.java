@@ -177,7 +177,6 @@ public class MinPriorityQueue<T extends Comparable<T>> {
         return Arrays.toString(heap);
     }
 
-
     public static void main(String[] args) {
         Random random = new Random(47);
         int N = 20;
