@@ -64,16 +64,16 @@ public class BTree<T extends Comparable<T>> {
         if (x == null)
             return null;
         while (true) {
-            int i = 1;
-            while (i <= x.N && key.compareTo(x.keys[i-1]) > 0) {
-                i++;
+            int pos = 1;
+            while (pos <= x.N && key.compareTo(x.keys[pos-1]) > 0) {
+                pos++;
             }
-            if (i <= x.N && key == x.keys[i-1]) {        // 在该结点上找到关键字
+            if (pos <= x.N && key == x.keys[pos-1]) {        // 在该结点上找到关键字
                 return x;
             } else if (x.leaf) {                         // 该结点上存在该关键字，且该结点已经是叶结点了
                 return null;
             } else {
-                x = (Node)x.children[i-1];                     // 读取磁盘数据，沿树向下循环
+                x = (Node)x.children[pos-1];                     // 读取磁盘数据，沿树向下循环
             }
         }
     }
@@ -87,11 +87,11 @@ public class BTree<T extends Comparable<T>> {
         Node x = search(key);
         if (x == null)
             return -1;
-        int i = 1;
-        while (key != x.keys[i-1]) {
-            i++;
+        int pos = 1;
+        while (key != x.keys[pos-1]) {
+            pos++;
         }
-        return i;
+        return pos;
     }
 
     /**
@@ -102,6 +102,7 @@ public class BTree<T extends Comparable<T>> {
         /*
         * 从根结点开始，对插入关键字路径上的每一个结点进行检查，
         * 查看其是否已满，如果是，则将该结点进行分裂
+        * 根结点的分裂是树长高的唯一方式
         */
         if (root.N == 2 * degree - 1) {                               // 根结点已满
             Node s = new Node(degree);
@@ -117,10 +118,10 @@ public class BTree<T extends Comparable<T>> {
     /**
      * 将当前结点的某个子结点分裂，分裂后该结点的关键字会加1
      * @param p : 待处理的结点（即将分裂结点的父结点，该结点一定非满）
-     * @param i : 待分裂的当前结点x的第i个子结点
+     * @param pos : 待分裂的当前结点x的第i个子结点
      */
-    private void splitChild(Node p, int i) {
-        Node y = (Node)p.children[i-1];                         // 待分裂结点（结点的第i个子结点）
+    private void splitChild(Node p, int pos) {
+        Node y = (Node)p.children[pos-1];                  // 待分裂结点（结点的第i个子结点）
         Node z = new Node(degree);                        // 新建一个结点，该结点会成为y的兄弟结点
         z.leaf = y.leaf;                                  // 将待y结点的叶结点属性赋予新建结点z
         z.N = degree - 1;
@@ -137,12 +138,12 @@ public class BTree<T extends Comparable<T>> {
         }
         y.N = degree - 1;
 
-        for (int j = p.N; j >= i; j--) {                // 将p结点的后一半向右移动一位
+        for (int j = p.N; j >= pos; j--) {                // 将p结点的后一半向右移动一位
             p.keys[j] = p.keys[j-1];
             p.children[j+1] = p.children[j];
         }
-        p.keys[i-1] = y.keys[degree-1];                // 将子结点的中间结点提升到父结点中
-        p.children[i] = z;
+        p.keys[pos-1] = y.keys[degree-1];                // 将子结点的中间结点提升到父结点中
+        p.children[pos] = z;
         z.parent = p;                                  // 将z结点链接到父结点上
         y.keys[degree-1] = null;
         p.N += 1;
@@ -177,15 +178,23 @@ public class BTree<T extends Comparable<T>> {
         }
     }
 
+    public T minKey() {
+        return minKey(root);
+    }
+
     // 找到以某结点为根的最小结点的关键字
-    public T minKey(Node x) {
+    private T minKey(Node x) {
         while (!x.leaf) {
             x = (Node)x.children[0];
         }
         return x.keys[0];
     }
 
-    public T maxKey(Node x) {
+    public T maxKey() {
+        return maxKey(root);
+    }
+
+    private T maxKey(Node x) {
         while (!x.leaf) {
             x = (Node)x.children[x.N];
         }
@@ -437,8 +446,8 @@ public class BTree<T extends Comparable<T>> {
         }
         System.out.println(tree.search('V'));
         System.out.println(tree.searchIndex('V'));
-        System.out.println(tree.minKey(tree.root));
-        System.out.println(tree.maxKey(tree.root));
+        System.out.println(tree.minKey());
+        System.out.println(tree.maxKey());
         char x = 'X';
         tree.delete(x);
         char y = 'W';
