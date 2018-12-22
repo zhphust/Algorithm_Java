@@ -69,7 +69,7 @@ public class OrderStatistics {
                 }
             }
         }
-        return "min: " + min + ", max: " + max;
+        return "minKey: " + min + ", max: " + max;
     }
 
     /**
@@ -167,7 +167,7 @@ public class OrderStatistics {
         for (int i = 0; i < a.length; i++) {
             a[i] = random.nextInt(2000);
         }
-        System.out.println("min: " + minimum(a));
+        System.out.println("minKey: " + minimum(a));
         System.out.println(minAndMax(a));
         Integer[] b = new Integer[a.length];
         System.arraycopy(a, 0, b, 0, a.length);
