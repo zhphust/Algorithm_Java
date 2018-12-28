@@ -75,7 +75,7 @@ public class UF2 {
     }
 
     public static void main(String[] args) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader("./src/data/mediumUF.txt"));
+        BufferedReader reader = new BufferedReader(new FileReader("./src/source/mediumUF.txt"));
         String s = reader.readLine();
         UF2 uf = new UF2(Integer.parseInt(s));
         while ((s = reader.readLine()) != null) {
