@@ -1,14 +1,14 @@
 package graph;
 
 /**
- * 加权图的边
+ * 加权图的边，本例包含了无向边和有向边的表示
  * @author Alisa.Wang zhphust09@hust.edu.cn at 2018/12/9
  * @version 8.0
  */
 public class Edge implements Comparable<Edge> {
     private final int v;
     private final int w;
-    private final double weight;                    // 权重
+    private final double weight;                        // 权重
 
     public Edge(int v, int w, double weight) {
         this.v = v;
@@ -20,6 +20,7 @@ public class Edge implements Comparable<Edge> {
         return weight;
     }
 
+    // 无向边
     public int onePoint() {
         return v;
     }
@@ -29,6 +30,15 @@ public class Edge implements Comparable<Edge> {
             return this.w;
         else
             return this.v;
+    }
+
+    // 有向边
+    public int from() {
+        return v;
+    }
+
+    public int to() {
+        return w;
     }
 
     public int compareTo(Edge that) {
