@@ -25,28 +25,28 @@ public class SpiralMatrix {
              右下边界是(M - 1 - row, N - 1 - row)，
              左下边界是(M - 1 - row, row)
              */
-            // 处理上面一行, 列范围(row, N - 1 - row)
+            // 1.处理上面一行, 列范围(row, N - 1 - row)
             if (row > N - 1 - row)
                 return list;
             for (int j = row; j <= N - 1 - row; j++) {
                 list.add(matrix[row][j]);
             }
 
-            // 处理右边一列，行范围（row+1, M - 1 - row)
+            // 2.处理右边一列，行范围（row+1, M - 1 - row)
             if (row + 1 > M - row - 1)                        // 遇到单行，数据已处理完，直接返回
                 return list;
             for (int i = row + 1; i <= M - 1 - row; i++) {
                 list.add(matrix[i][N - 1 - row]);
             }
 
-            // 处理下面一行，列范围(row, N - 1 - row - 1)
-            if (N - 1 - row - 1 < row)                       // 单列，数据已处理完，直接返回
+            // 3.处理下面一行，列范围(row, N - 1 - row - 1)
+            if (N - 1 - row - 1 < row)                       // 遇到单列，数据已处理完，直接返回
                 return list;
             for (int j = N - 1 - row - 1; j >= row; j--) {
                 list.add(matrix[M - 1 - row][j]);
             }
 
-            // 处理左边一列，行范围(row+1, M - 1 - row - 1)
+            // 4.处理左边一列，行范围(row+1, M - 1 - row - 1)
             // 边界条件自然满足
             for (int i = M - 1 - row - 1; i >= row + 1; i--) {
                 list.add(matrix[i][row]);
