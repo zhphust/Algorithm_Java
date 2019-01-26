@@ -13,6 +13,8 @@ import java.util.Stack;
 public class Permutations {
     public List<List<Integer>> permute(int[] nums) {
         List<List<Integer>> result = new ArrayList<>();
+        if (nums.length == 0)
+            return result;
         Stack<Integer> temp = new Stack<>();
         backTrace(nums, result, temp);
         return result;
