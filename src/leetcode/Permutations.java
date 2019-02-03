@@ -2,7 +2,6 @@ package leetcode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 /**
  * 46. 全排列（中等，回溯算法）
@@ -15,26 +14,26 @@ public class Permutations {
         List<List<Integer>> result = new ArrayList<>();
         if (nums.length == 0)
             return result;
-        Stack<Integer> temp = new Stack<>();
+        List<Integer> temp = new ArrayList<>();
         backTrace(nums, result, temp);
         return result;
     }
 
-    private void backTrace(int[] nums, List<List<Integer>> result, Stack<Integer> temp) {
+    private void backTrace(int[] nums, List<List<Integer>> result, List<Integer> temp) {
         if (temp.size() == nums.length) {
             result.add(new ArrayList<>(temp));
             return;
         }
         for (int i = 0; i < nums.length; i++) {
             if (canInsert(temp, nums[i])) {
-                temp.push(nums[i]);
+                temp.add(nums[i]);
                 backTrace(nums, result, temp);
-                temp.pop();
+                temp.remove(temp.size() - 1);
             }
         }
     }
 
-    private boolean canInsert(Stack<Integer> temp, int ele) {
+    private boolean canInsert(List<Integer> temp, int ele) {
         for (Integer i : temp) {
             if (ele == i)
                 return false;
