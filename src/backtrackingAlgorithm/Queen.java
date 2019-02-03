@@ -68,7 +68,7 @@ public class Queen {
     }
 
     public static void main(String[] args) {
-        Queen q = new Queen(4);
+        Queen q = new Queen(8);
         System.out.println(q.sum());
         q.printSolution();
     }
